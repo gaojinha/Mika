@@ -181,7 +181,7 @@ data class AddForm(
     val familyTokens: List<String> get() = presetFor(preset).familyTokens.ifEmpty { ModelOptions.familyOf(baseUrl) }
 
     companion object {
-        fun of(p: ProviderPreset) = AddForm(p.label, p.kind, p.baseUrl, "")
+        fun of(p: ProviderPreset) = AddForm(p.label, p.kind, p.baseUrl, p.defaultApiKey.orEmpty())
         fun presetFor(label: String): ProviderPreset = ProviderPresets.all.firstOrNull { it.label == label } ?: ProviderPresets.custom
     }
 }
@@ -414,7 +414,8 @@ class ModelSetupViewModel(
     fun selectPreset(label: String) {
         val p = AddForm.presetFor(label)
         if (p.label == _state.value.form.preset) return
-        val key = _state.value.form.apiKey
+        // 用户已经手填了 Key 就留着;没填就用预设自带的
+        val key = _state.value.form.apiKey.ifBlank { p.defaultApiKey.orEmpty() }
         edit { AddForm.of(p).copy(apiKey = key) }
     }
 

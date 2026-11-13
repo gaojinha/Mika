@@ -25,6 +25,8 @@ data class ProviderPreset(
      * 只填官方文档确认过的值,不猜;照服务商写明的顺序。
      */
     val reasoningLevels: List<String> = emptyList(),
+    /** 预设自带的 Key(选中预设时预填):只给本机自用的私有改造用,不填就是让用户自己填。 */
+    val defaultApiKey: String? = null,
 )
 
 object ProviderPresets {
@@ -85,6 +87,10 @@ object ProviderPresets {
         // 自己机器上跑的:地址是本机的默认端口,跑在电脑上时改成电脑的局域网地址;不要 Key
         ProviderPreset("Ollama", ProviderConfig.Kind.OpenAiCompat, "http://127.0.0.1:11434/v1", caps(), selfHosted = true),
         ProviderPreset("LM Studio", ProviderConfig.Kind.OpenAiCompat, "http://127.0.0.1:1234/v1", caps(), selfHosted = true),
+        // OpenCode 官方推理网关：Key 固定是 public，*-free 模型免费
+        ProviderPreset("OpenCode 免费", ProviderConfig.Kind.OpenAiCompat, "https://opencode.ai/inference/openai/v1", caps(), defaultApiKey = "public"),
+        // Agnes（apihub.agnes-ai.com）：OpenAI 兼容接口；免费档限速 1 请求/分钟
+        ProviderPreset("Agnes", ProviderConfig.Kind.OpenAiCompat, "https://apihub.agnes-ai.com/v1", caps(), familyTokens = listOf("agnes"), defaultApiKey = ""),
         ProviderPreset("自定义", ProviderConfig.Kind.OpenAiCompat, "", caps()),
     )
 
