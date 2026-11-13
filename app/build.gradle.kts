@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.wangzan101.mika"
-        minSdk = 30
+        minSdk = 29
         targetSdk = 35
         versionCode = 41
         versionName = "0.1.40"
